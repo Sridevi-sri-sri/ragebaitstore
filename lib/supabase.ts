@@ -62,13 +62,41 @@ export interface OrderItem {
   price: number;
 }
 
+// Insert types — all server-generated fields are optional
+export type ProductInsert    = Omit<Product,   "id" | "created_at"> & Partial<Pick<Product,   "id" | "created_at">>;
+export type CartItemInsert   = Omit<CartItem,  "id" | "created_at"> & Partial<Pick<CartItem,  "id" | "created_at">>;
+export type OrderInsert      = Omit<Order,     "id" | "created_at"> & Partial<Pick<Order,     "id" | "created_at">>;
+export type OrderItemInsert  = Omit<OrderItem, "id">                & Partial<Pick<OrderItem, "id">>;
+
+// Update types — all fields optional
+export type ProductUpdate    = Partial<Product>;
+export type CartItemUpdate   = Partial<CartItem>;
+export type OrderUpdate      = Partial<Order>;
+export type OrderItemUpdate  = Partial<OrderItem>;
+
 export type Database = {
   public: {
     Tables: {
-      products:    { Row: Product };
-      cart_items:  { Row: CartItem };
-      orders:      { Row: Order };
-      order_items: { Row: OrderItem };
+      products: {
+        Row:    Product;
+        Insert: ProductInsert;
+        Update: ProductUpdate;
+      };
+      cart_items: {
+        Row:    CartItem;
+        Insert: CartItemInsert;
+        Update: CartItemUpdate;
+      };
+      orders: {
+        Row:    Order;
+        Insert: OrderInsert;
+        Update: OrderUpdate;
+      };
+      order_items: {
+        Row:    OrderItem;
+        Insert: OrderItemInsert;
+        Update: OrderItemUpdate;
+      };
     };
   };
 };
