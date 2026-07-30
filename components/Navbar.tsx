@@ -3,16 +3,16 @@
 import { useState } from "react";
 import { ShoppingCart, Menu, X, Zap } from "lucide-react";
 import Link from "next/link";
+import { useCart } from "@/contexts/CartContext";
 
 const NAV_LINKS = [
   { label: "Home", href: "/" },
   { label: "Products", href: "/products" },
 ];
 
-const CART_ITEM_COUNT = 0;
-
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { itemCount, openDrawer } = useCart();
 
   return (
     <header className="sticky top-0 z-50 w-full bg-secondary border-b border-border shadow-md">
@@ -52,21 +52,22 @@ export default function Navbar() {
           {/* ── Right Side: Cart + Mobile Toggle ── */}
           <div className="flex items-center gap-2">
             {/* Cart Button */}
-            <Link
-              href="/cart"
-              aria-label={`Cart (${CART_ITEM_COUNT} items)`}
+            <button
+              type="button"
+              onClick={openDrawer}
+              aria-label={`Cart (${itemCount} items)`}
               className="relative flex items-center justify-center w-10 h-10 rounded-md text-secondary-foreground/80 hover:text-primary-foreground hover:bg-white/10 transition-colors duration-150"
             >
               <ShoppingCart size={22} aria-hidden="true" />
-              {CART_ITEM_COUNT > 0 && (
+              {itemCount > 0 && (
                 <span
                   aria-hidden="true"
                   className="absolute -top-1 -right-1 flex items-center justify-center min-w-[18px] h-[18px] px-1 rounded-full bg-primary text-primary-foreground text-[10px] font-bold leading-none"
                 >
-                  {CART_ITEM_COUNT > 99 ? "99+" : CART_ITEM_COUNT}
+                  {itemCount > 99 ? "99+" : itemCount}
                 </span>
               )}
-            </Link>
+            </button>
 
             {/* Hamburger – mobile only */}
             <button
