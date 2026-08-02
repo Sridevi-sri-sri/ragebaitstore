@@ -21,7 +21,7 @@ export async function GET(req: NextRequest) {
     return err('Missing required query parameter: user_id', 400);
   }
 
-  const { data, error } = await supabase
+  const { data, error } = await (supabase as any)
     .from('cart_items')
     .select('*')
     .eq('user_id', user_id)
@@ -55,9 +55,9 @@ export async function POST(req: NextRequest) {
     return err('quantity must be a positive integer', 400);
   }
 
-  const { data, error } = await supabase
+  const { data, error } = await (supabase as any)
     .from('cart_items')
-    .insert({ user_id, product_id, quantity })
+    .insert([{ user_id, product_id, quantity }])
     .select()
     .single();
 
@@ -89,7 +89,7 @@ export async function PATCH(req: NextRequest) {
     return err('quantity must be a positive integer', 400);
   }
 
-  const { data, error } = await supabase
+  const { data, error } = await (supabase as any)
     .from('cart_items')
     .update({ quantity })
     .eq('id', id)
@@ -121,7 +121,7 @@ export async function DELETE(req: NextRequest) {
     return err('Missing required field: id', 400);
   }
 
-  const { error, count } = await supabase
+  const { error, count } = await (supabase as any)
     .from('cart_items')
     .delete({ count: 'exact' })
     .eq('id', id);

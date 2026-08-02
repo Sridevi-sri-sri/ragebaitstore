@@ -6,9 +6,14 @@
  * Firebase app initialisation + Auth helpers.
  * All config is read exclusively from NEXT_PUBLIC_* env vars — no hardcoded values.
  *
+ * When Firebase env vars are not set (e.g. local dev without .env.local),
+ * the module initialises gracefully without throwing, and all auth helpers
+ * return early with a clear console warning instead of crashing the app.
+ *
  * Exports:
- *   app              — the initialised FirebaseApp singleton
- *   auth             — the Auth instance
+ *   app              — the initialised FirebaseApp, or null if unconfigured
+ *   auth             — the Auth instance, or null if unconfigured
+ *   isFirebaseReady  — boolean flag; check this before calling auth helpers
  *   signInWithGoogle — triggers Google popup sign-in
  *   signOutUser      — signs the current user out
  *   useAuthState     — React hook that tracks auth state changes
@@ -40,13 +45,38 @@ const firebaseConfig = {
 };
 
 // ─────────────────────────────────────────────────────────────────────────────
-//  Singleton initialisation — safe for Next.js hot-reload / multiple imports
+//  Guard — only initialise when credentials are present
 // ─────────────────────────────────────────────────────────────────────────────
 
-export const app: FirebaseApp =
-  getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
+const isConfigured = Boolean(
+  firebaseConfig.apiKey &&
+  firebaseConfig.authDomain &&
+  firebaseConfig.projectId &&
+  firebaseConfig.appId
+);
 
-export const auth: Auth = getAuth(app);
+if (!isConfigured && typeof window !== "undefined") {
+  console.warn(
+    "[firebase] Missing NEXT_PUBLIC_FIREBASE_* env vars. " +
+    "Copy .env.local.example → .env.local and fill in your Firebase credentials. " +
+    "Auth features will be disabled until then."
+  );
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+//  Singleton initialisation — skipped when config is absent
+// ─────────────────────────────────────────────────────────────────────────────
+
+export let app:  FirebaseApp | null = null;
+export let auth: Auth        | null = null;
+
+if (isConfigured) {
+  app  = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
+  auth = getAuth(app);
+}
+
+/** True when Firebase has been initialised with valid credentials. */
+export const isFirebaseReady = isConfigured;
 
 // ─────────────────────────────────────────────────────────────────────────────
 //  Auth helpers
@@ -56,9 +86,10 @@ const googleProvider = new GoogleAuthProvider();
 
 /**
  * Opens the Google sign-in popup and returns the signed-in User.
- * Throws if the popup is closed or an error occurs.
+ * Throws if Firebase is not configured or the popup is closed/errors.
  */
 export async function signInWithGoogle(): Promise<User> {
+  if (!auth) throw new Error("[firebase] Firebase is not configured. Add NEXT_PUBLIC_FIREBASE_* vars to .env.local.");
   const result = await signInWithPopup(auth, googleProvider);
   return result.user;
 }
@@ -67,6 +98,7 @@ export async function signInWithGoogle(): Promise<User> {
  * Signs the current user out of Firebase Auth.
  */
 export async function signOutUser(): Promise<void> {
+  if (!auth) return;
   await signOut(auth);
 }
 
@@ -75,7 +107,7 @@ export async function signOutUser(): Promise<void> {
 // ─────────────────────────────────────────────────────────────────────────────
 
 interface AuthState {
-  user: User | null;
+  user:    User | null;
   loading: boolean;
 }
 
@@ -83,23 +115,22 @@ interface AuthState {
  * useAuthState
  *
  * Returns { user, loading }.
- * - `loading` is true until Firebase resolves the persisted session.
- * - `user` is null when signed out, a User object when signed in.
- *
- * Usage:
- *   const { user, loading } = useAuthState();
+ * - `loading` is true until Firebase resolves the persisted session (or
+ *    immediately false when Firebase is not configured).
+ * - `user` is null when signed out or Firebase is unconfigured.
  */
 export function useAuthState(): AuthState {
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [user,    setUser   ] = useState<User | null>(null);
+  const [loading, setLoading] = useState(isConfigured); // no loading if unconfigured
 
   useEffect(() => {
+    if (!auth) return;
+
     const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
       setUser(firebaseUser);
       setLoading(false);
     });
 
-    // Cleanup the listener when the component unmounts
     return () => unsubscribe();
   }, []);
 

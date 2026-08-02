@@ -22,7 +22,7 @@ export interface Product {
 // ─────────────────────────────────────────────────────────────
 
 async function fetchProducts(search: string, category: string): Promise<Product[]> {
-  let query = supabase
+  let query = (supabase as any)
     .from("products")
     .select("id, name, description, price, image_url, category, slug");
 

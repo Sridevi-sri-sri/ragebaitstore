@@ -60,7 +60,7 @@ export async function POST(request: NextRequest) {
     }
 
     // ── 4. Signature valid → find the order in Supabase ───────────
-    const { data: order, error: fetchError } = await supabase
+    const { data: order, error: fetchError } = await (supabase as any)
       .from("orders")
       .select("id, status")
       .eq("razorpay_order_id", razorpay_order_id)
@@ -79,7 +79,7 @@ export async function POST(request: NextRequest) {
     }
 
     // ── 5. Update order: status → 'paid', store payment id ────────
-    const { error: updateError } = await supabase
+    const { error: updateError } = await (supabase as any)
       .from("orders")
       .update({
         status:              "paid",

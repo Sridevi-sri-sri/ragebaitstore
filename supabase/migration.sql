@@ -148,7 +148,7 @@ VALUES
     'Chaos Theory Tee',
     'Wear your disorder proudly. Ultra-soft 100% cotton with a chaotic graphic print designed to start conversations.',
     649,
-    'https://placehold.co/600x600/e63946/ffffff?text=Chaos+Tee',
+    '/images/products/chaos_theory_tee_1785694271702.png',
     'tees',
     120,
     'chaos-theory-tee'
@@ -158,7 +158,7 @@ VALUES
     'Rage Bait Hoodie',
     'The hoodie that provokes. Heavyweight fleece, kangaroo pocket, and embroidered logo that says everything without saying anything.',
     1499,
-    'https://placehold.co/600x600/1d3557/f1faee?text=Rage+Hoodie',
+    '/images/products/rage_bait_hoodie_1785694282670.png',
     'hoodies',
     75,
     'rage-bait-hoodie'
@@ -168,7 +168,7 @@ VALUES
     'Main Character Cap',
     'Structured 6-panel cap with embroidered text. Adjustable strap. Because every story needs a protagonist.',
     499,
-    'https://placehold.co/600x600/f4a261/ffffff?text=Main+Cap',
+    '/images/products/main_character_cap_1785694292202.png',
     'accessories',
     200,
     'main-character-cap'
@@ -178,7 +178,7 @@ VALUES
     'Unfiltered Graphic Tee',
     'Bold, raw, unapologetic. Screen-printed heavyweight tee with a design that refuses to be ignored.',
     749,
-    'https://placehold.co/600x600/e63946/ffffff?text=Unfiltered+Tee',
+    '/images/products/unfiltered_graphic_tee_1785694303229.png',
     'tees',
     95,
     'unfiltered-graphic-tee'
@@ -188,7 +188,7 @@ VALUES
     'Loud Mouth Zip Hoodie',
     'Full-zip fleece hoodie with contrast lining. Say what everyone''s thinking without opening your mouth.',
     1799,
-    'https://placehold.co/600x600/1d3557/f4a261?text=Loud+Hoodie',
+    '/images/products/loud_mouth_zip_hoodie_1785694313975.png',
     'hoodies',
     50,
     'loud-mouth-zip-hoodie'
@@ -198,7 +198,7 @@ VALUES
     'Provocateur Tote',
     'Heavy-duty canvas tote with a slogan that makes people look twice. Fits a laptop. Starts arguments.',
     399,
-    'https://placehold.co/600x600/0d1117/e63946?text=Tote+Bag',
+    '/images/products/provocateur_tote_1785694323718.png',
     'accessories',
     300,
     'provocateur-tote'
@@ -208,7 +208,7 @@ VALUES
     'Hypebeast Killer Tee',
     'Anti-hype statement tee. Vintage wash, relaxed fit, oversized print. The most ironic shirt in any room.',
     699,
-    'https://placehold.co/600x600/e63946/ffffff?text=Hypebeast+Tee',
+    '/images/products/hypebeast_killer_tee_1785694333176.png',
     'tees',
     110,
     'hypebeast-killer-tee'
@@ -218,7 +218,7 @@ VALUES
     'Dissent Enamel Pin Set',
     'Set of 3 hard-enamel pins. Pin them on your bag, jacket, or wherever you need a little extra attitude.',
     299,
-    'https://placehold.co/600x600/f4a261/0d1117?text=Pin+Set',
+    '/images/products/dissent_enamel_pin_set_1785694343575.png',
     'accessories',
     400,
     'dissent-enamel-pin-set'

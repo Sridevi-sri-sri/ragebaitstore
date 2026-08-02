@@ -59,6 +59,10 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
   // ── Auth listener ──────────────────────────────────────────────────────────
   useEffect(() => {
+    if (!auth) {
+      // Firebase not configured yet — stay signed out silently
+      return;
+    }
     const unsub = onAuthStateChanged(auth, (u) => {
       setUser(u);
       if (!u) setItems([]); // clear cart when signed out
